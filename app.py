@@ -4,6 +4,7 @@ import numpy as np
 import librosa
 from io import BytesIO
 import matplotlib.pyplot as plt
+import time  # Ensure this import is here
 
 # Assuming 'commands' contains your class labels
 commands = np.array(['down', 'go', 'left', 'no', 'off', 'on', 'right', 'stop', 'up', 'yes'])
@@ -50,24 +51,33 @@ if uploaded_file is not None:
     bytes_data = uploaded_file.read()
     audio, sr = librosa.load(BytesIO(bytes_data), sr=16000)
     
-   # Display waveform
-    plt.figure(figsize=(10, 4))
-    plt.plot(np.linspace(0, 1, len(audio)), audio)
-    plt.title('Waveform of the Uploaded Audio File')
-    plt.xlabel('Time')
-    plt.ylabel('Amplitude')
-    st.pyplot(plt)
-    
     # Get the spectrogram
     spectrogram = get_spectrogram(audio)
     
     # Make batch dimension
     spectrogram = spectrogram[tf.newaxis, ...]
     
+    # Start the timer
+    start_time = time.time()
+    
     # Predict the class
     predictions = model(spectrogram, training=False)
+    
+    # End the timer
+    end_time = time.time()
+    
+    # Calculate the prediction time
+    prediction_time = end_time - start_time
+    
     predicted_index = tf.argmax(predictions, axis=1).numpy()[0]
     predicted_class = commands[predicted_index]
     
     # Display prediction
     st.write(f'The model predicts: {predicted_class}')
+    
+    # Display prediction time as a bar graph
+    plt.figure(figsize=(5, 3))
+    plt.bar(['Prediction Time'], [prediction_time], color='skyblue')
+    plt.ylabel('Time (seconds)')
+    plt.title('Time Taken for Prediction')
+    st.pyplot(plt)
