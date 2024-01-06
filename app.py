@@ -2,6 +2,7 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from io import BytesIO
+import librosa
 
 # Assuming 'commands' contains your class labels as in your notebook
 commands = np.array(['yes', 'no', 'up', 'down', 'left', 'right', 'on', 'off', 'stop', 'go'])
