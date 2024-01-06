@@ -1,5 +1,10 @@
 streamlit
 tensorflow
 opencv-python-headless
+<<<<<<< HEAD
 matplotlib
 librosa
+=======
+librosa
+matplotlib
+>>>>>>> 1778d75bc4260336f0f774d102b097cca1c6ffa1
